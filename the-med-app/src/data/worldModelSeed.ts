@@ -1,0 +1,255 @@
+import type { WorldModelSeed } from './types';
+
+export const worldModelSeed: WorldModelSeed = {
+  context: {
+    project: 'The Med',
+    developer: 'People & Places',
+    viewMode: 'Graph',
+    demoMode: true,
+  },
+
+  categories: [
+    {
+      id: 'business-objects',
+      name: 'Business Objects',
+      nodes: ['Project', 'Phase', 'Building', 'Unit', 'Unit Type', 'Feature', 'Payment Plan'],
+    },
+    {
+      id: 'decision-objects',
+      name: 'Decision Objects',
+      nodes: ['Decision Type', 'Scenario', 'Recommendation', 'Approval', 'Outcome'],
+    },
+    {
+      id: 'logic-objects',
+      name: 'Logic Objects',
+      nodes: ['Rule', 'Constraint', 'Objective', 'Premium Logic', 'Threshold', 'Prior'],
+    },
+    {
+      id: 'signal-objects',
+      name: 'Signal Objects',
+      nodes: ['Inventory Aging', 'Reservation Trend', 'Conversion Drop', 'Price Sensitivity'],
+    },
+    {
+      id: 'system-objects',
+      name: 'System Objects',
+      nodes: ['Experiment Run', 'Context Packet', 'Decision Packet', 'Confidence Score'],
+    },
+  ],
+
+  nodes: [
+    {
+      id: 'project-the-med',
+      label: 'The Med',
+      type: 'Project',
+      status: 'Imported',
+      source: 'Seeded Demo Data',
+      description: 'Primary project node for People & Places inventory and decision modeling.',
+      properties: {
+        developer: 'People & Places',
+        region: 'North Coast',
+        activePhase: 'Phase 1',
+      },
+    },
+    {
+      id: 'phase-1',
+      label: 'Phase 1',
+      type: 'Phase',
+      status: 'Imported',
+      source: 'Seeded Demo Data',
+      description: 'Current active phase used for inventory and simulation scope.',
+      properties: {
+        totalUnits: 96,
+        availableUnits: 52,
+      },
+    },
+    {
+      id: 'decision-repricing',
+      label: 'Repricing',
+      type: 'Decision Type',
+      status: 'Seeded',
+      source: 'Demo Config',
+      description: 'Decision type for adjusting prices across selected unit scopes.',
+      properties: {
+        allowedActions: ['Increase Price', 'Decrease Price', 'Leave Unchanged'],
+        applicableScopes: ['Unit', 'Batch', 'Unit Type'],
+        requiredData: ['Inventory', 'Pricing History', 'Reservation Trend'],
+      },
+    },
+    {
+      id: 'decision-release',
+      label: 'Release Strategy',
+      type: 'Decision Type',
+      status: 'Seeded',
+      source: 'Demo Config',
+      description: 'Decision type for release timing and scarcity management.',
+      properties: {
+        allowedActions: ['Release Now', 'Phase Release', 'Hold Premium'],
+        applicableScopes: ['Batch', 'Premium Segment'],
+        requiredData: ['Release State', 'Premium Class', 'Inventory Aging'],
+      },
+    },
+    {
+      id: 'objective-balanced',
+      label: 'Balanced Strategy',
+      type: 'Objective',
+      status: 'Configured',
+      source: 'Scenario Config',
+      description: 'Balances revenue, sell-through, and inventory health.',
+      properties: {
+        priorityOrder: ['Revenue', 'Sell-Through', 'Inventory Health'],
+      },
+    },
+    {
+      id: 'constraint-price-floor',
+      label: 'Minimum Price Floor',
+      type: 'Constraint',
+      status: 'Configured',
+      source: 'Seeded Business Rule',
+      description: 'Prevents price reductions below minimum acceptable band.',
+      properties: {
+        constraintKind: 'Hard',
+        appliesTo: ['Repricing'],
+      },
+    },
+    {
+      id: 'constraint-protect-premium',
+      label: 'Protect Premium Positioning',
+      type: 'Constraint',
+      status: 'Configured',
+      source: 'Executive Strategy Input',
+      description: 'Prevents tactical actions that weaken premium scarcity or positioning.',
+      properties: {
+        constraintKind: 'Soft',
+        appliesTo: ['Repricing', 'Release Strategy'],
+      },
+    },
+    {
+      id: 'rule-corner-premium',
+      label: 'Corner Unit Premium',
+      type: 'Premium Logic',
+      status: 'Seeded',
+      source: 'Demo Assumption',
+      description: 'Initial premium prior assigned to corner and premium view units.',
+      properties: {
+        initialPrior: '+12%',
+        appliesTo: ['Premium Corner Units'],
+        validationState: 'Awaiting Client Validation',
+      },
+    },
+    {
+      id: 'signal-aging-2br',
+      label: 'Aging 2BR Inventory',
+      type: 'Inventory Aging',
+      status: 'Learned',
+      source: 'Simulation Watchlist',
+      description: 'Tracks aging exposure in standard-view 2BR stock.',
+      properties: {
+        thresholdDays: 75,
+        currentAffectedUnits: 12,
+      },
+    },
+    {
+      id: 'signal-reservation-drop',
+      label: 'Reservation Softness',
+      type: 'Reservation Trend',
+      status: 'Learned',
+      source: 'Simulation Watchlist',
+      description: 'Detects weaker-than-average reservation velocity in selected segments.',
+      properties: {
+        phaseBenchmark: 'Reservation velocity below phase average',
+      },
+    },
+    {
+      id: 'scenario-optimized',
+      label: 'AI Optimized Strategy',
+      type: 'Scenario',
+      status: 'Generated',
+      source: 'Simulation Engine',
+      description: 'Top-ranked scenario balancing revenue and inventory health.',
+      properties: {
+        rank: 1,
+        revenue6m: 'EGP 134M',
+        selloutMonths: 10.8,
+      },
+    },
+    {
+      id: 'recommendation-001',
+      label: 'Recommendation #001',
+      type: 'Recommendation',
+      status: 'Generated',
+      source: 'Simulation Engine',
+      description: 'Recommended repricing and payment-plan adjustment for aging 2BR stock.',
+      properties: {
+        recommendation: 'Reduce price by 2.5% on aging standard-view 2BR units',
+        confidence: 'Medium',
+      },
+    },
+    {
+      id: 'approval-commercial',
+      label: 'Commercial Approval',
+      type: 'Approval',
+      status: 'Pending',
+      source: 'Workflow',
+      description: 'Human approval step for recommendation execution.',
+      properties: {
+        owner: 'Commercial Director',
+        currentStatus: 'Awaiting Review',
+      },
+    },
+    {
+      id: 'outcome-feedback',
+      label: 'Observed Outcome',
+      type: 'Outcome',
+      status: 'Seeded',
+      source: 'Demo History',
+      description: 'Outcome node showing how later performance feeds back into future loops.',
+      properties: {
+        feedbackUse: 'Update priors and future simulation quality',
+      },
+    },
+    {
+      id: 'experiment-run-001',
+      label: 'Overnight Run 001',
+      type: 'Experiment Run',
+      status: 'Completed',
+      source: 'Simulation Engine',
+      description: 'Nightly scenario batch for aging stock optimization.',
+      properties: {
+        scenariosTested: 16,
+        horizonMonths: 6,
+      },
+    },
+    {
+      id: 'decision-packet-001',
+      label: 'Decision Packet #001',
+      type: 'Decision Packet',
+      status: 'Generated',
+      source: 'Simulation Engine',
+      description: 'Structured packet combining recommendation, rationale, and constraints check.',
+      properties: {
+        linkedRecommendation: 'Recommendation #001',
+      },
+    },
+  ],
+
+  edges: [
+    { from: 'project-the-med', to: 'phase-1', label: 'HAS' },
+    { from: 'decision-repricing', to: 'objective-balanced', label: 'USES' },
+    { from: 'decision-repricing', to: 'constraint-price-floor', label: 'BOUNDED_BY' },
+    { from: 'decision-repricing', to: 'constraint-protect-premium', label: 'BOUNDED_BY' },
+    { from: 'rule-corner-premium', to: 'decision-repricing', label: 'APPLIES_TO' },
+    { from: 'signal-aging-2br', to: 'experiment-run-001', label: 'TRIGGERS' },
+    { from: 'signal-reservation-drop', to: 'experiment-run-001', label: 'TRIGGERS' },
+    { from: 'experiment-run-001', to: 'scenario-optimized', label: 'EVALUATES' },
+    { from: 'scenario-optimized', to: 'recommendation-001', label: 'GENERATES' },
+    { from: 'recommendation-001', to: 'decision-packet-001', label: 'PACKAGED_AS' },
+    { from: 'recommendation-001', to: 'approval-commercial', label: 'REVIEWED_BY' },
+    { from: 'approval-commercial', to: 'outcome-feedback', label: 'PRODUCES' },
+    { from: 'outcome-feedback', to: 'rule-corner-premium', label: 'FEEDS_BACK_TO' },
+  ],
+
+  inspectorDefaults: {
+    selectedNodeId: 'decision-repricing',
+    availableActions: ['View in Simulation', 'Mark as Client-Required', 'Show Downstream Effects'],
+  },
+};
