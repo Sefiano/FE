@@ -1,0 +1,275 @@
+import type { SimulationSeed } from './types';
+
+export const simulationSeed: SimulationSeed = {
+  context: {
+    project: 'The Med',
+    developer: 'People & Places',
+    phase: 'Phase 1',
+    batch: 'Aging 2BR + Standard View Units',
+    horizonMonths: 6,
+    syntheticArrivals: 1200,
+    objective: 'Balanced',
+    lastRunAt: '2026-04-05T07:30:00Z',
+    demoMode: true,
+  },
+
+  selectedScope: {
+    totalUnitsInScope: 48,
+    availableNow: 34,
+    heldOrReserved: 6,
+    soldHistorically: 8,
+    unitMix: [
+      { label: '2BR', value: 24 },
+      { label: '3BR', value: 16 },
+      { label: 'Premium Corner', value: 8 },
+    ],
+  },
+
+  objectives: [
+    'Maximize Revenue',
+    'Accelerate Sell-Through',
+    'Improve Cash Recovery',
+    'Protect Premium Positioning',
+    'Balanced',
+  ],
+
+  constraints: [
+    'Minimum price floor enforced',
+    'Protect premium corner units',
+    'Do not discount lagoon-facing stock',
+    'Maintain monthly absorption band',
+  ],
+
+  experimentClasses: [
+    {
+      id: 'pricing',
+      name: 'Pricing',
+      subtitle: 'Test tactical price shifts against sales speed and leftover inventory.',
+      levers: ['+5%', '+10%', '+15%', '-2.5%', '-5%'],
+      outputs: ['Revenue', 'Time to Sell', 'Inventory Leftover'],
+    },
+    {
+      id: 'release-strategy',
+      name: 'Release Strategy',
+      subtitle: 'Compare full release vs phased release across different unit categories.',
+      levers: ['Release All', 'Phased Release', 'Hold Premium', 'Sell Premium Early'],
+      outputs: ['Revenue Mix', 'Scarcity Preservation', 'Sellout Timing'],
+    },
+    {
+      id: 'payment-plans',
+      name: 'Payment Plans',
+      subtitle: 'Test plan attractiveness and cash recovery tradeoffs.',
+      levers: ['5Y', '8Y', 'Lower DP', 'Higher DP'],
+      outputs: ['Reservation Rate', 'Conversion Rate', 'Cashflow Profile'],
+    },
+    {
+      id: 'portfolio-shaping',
+      name: 'Portfolio Shaping',
+      subtitle: 'Control which inventory is pushed first to manage exposure and health.',
+      levers: [
+        'Push Smaller Units First',
+        'Push Larger Units First',
+        'Rebalance Exposure',
+        'Clear Aging Batch First',
+      ],
+      outputs: ['Inventory Aging', 'Revenue Distribution', 'Mix Quality'],
+    },
+  ],
+
+  engineFlow: [
+    {
+      step: 1,
+      title: 'Start with inventory',
+      body: 'Initialize simulation from current project inventory, unit features, pricing, and release state.',
+    },
+    {
+      step: 2,
+      title: 'Generate buyer arrivals',
+      body: 'Create synthetic buyer arrivals over time using project demand assumptions and historical behavior patterns.',
+    },
+    {
+      step: 3,
+      title: 'Evaluate available units',
+      body: 'Each buyer evaluates available units based on price, features, payment plan, and relative attractiveness.',
+    },
+    {
+      step: 4,
+      title: 'Pick probabilistically',
+      body: 'Buyer selects one unit probabilistically, capturing tradeoffs and substitution effects between units.',
+    },
+    {
+      step: 5,
+      title: 'Remove sold unit and repeat',
+      body: 'Sold units are removed, inventory evolves, and the process repeats across the full 6-month horizon.',
+    },
+  ],
+
+  runStates: [
+    'Loading inventory',
+    'Initializing synthetic arrivals',
+    'Applying selected scenario set',
+    'Evaluating unit choice probabilities',
+    'Updating inventory across simulated months',
+    'Aggregating outcomes',
+    'Ranking candidate strategies',
+  ],
+
+  runEvents: [
+    'Month 1 initialized with 52 available units',
+    'Buyer #104 evaluated 7 units and selected TM-D4-312',
+    'Inventory updated: 51 units remaining',
+    'Buyer #105 preferred lower down payment plan and selected TM-E2-118',
+    'Buyer #106 evaluated 5 units but did not convert',
+    'Month 2 demand concentrated on 2BR mid-tier stock',
+    'Premium corner units remained protected under phased release',
+    'Month 3 reservation velocity improved after tactical repricing',
+    'Month 4 leftover aging risk fell below warning threshold',
+    'Simulation complete: 16 candidate scenarios compared',
+  ],
+
+  timeline: [
+    { month: 'Month 1', highlighted: false },
+    { month: 'Month 2', highlighted: false },
+    { month: 'Month 3', highlighted: true },
+    { month: 'Month 4', highlighted: false },
+    { month: 'Month 5', highlighted: false },
+    { month: 'Month 6', highlighted: false },
+  ],
+
+  inventoryEvolution: {
+    before: {
+      available: 34,
+      premiumUnitsLeft: 8,
+      avgPrice: 8200000,
+      expectedSelloutMonths: 14,
+    },
+    current: {
+      available: 22,
+      premiumUnitsLeft: 6,
+      avgRealizedPrice: 8350000,
+      updatedExpectedSelloutMonths: 10.5,
+    },
+  },
+
+  scenarios: [
+    {
+      id: 'baseline',
+      name: 'Current Strategy',
+      tag: 'Baseline',
+      rank: 4,
+      inputs: [
+        'Current pricing',
+        'Current release timing',
+        'Current payment plan',
+        'Current sales priority',
+      ],
+      revenue6m: 126000000,
+      selloutMonths: 14.2,
+      leftoverUnits: 19,
+      avgRealizedPrice: 8200000,
+      cashflowScore: 68,
+      confidence: 'Medium',
+      why: 'Preserves current posture but leaves aging stock unresolved.',
+    },
+    {
+      id: 'optimized',
+      name: 'AI Optimized Strategy',
+      tag: 'Recommended',
+      rank: 1,
+      inputs: [
+        'Reprice aging 2BR units by -2.5%',
+        'Keep premium corner units unchanged',
+        'Shift mid-tier units to 8Y installment',
+        'Release premium stock gradually',
+      ],
+      revenue6m: 134000000,
+      selloutMonths: 10.8,
+      leftoverUnits: 12,
+      avgRealizedPrice: 8350000,
+      cashflowScore: 79,
+      confidence: 'Medium',
+      why: 'Best balanced tradeoff between revenue, sell-through, and inventory health.',
+    },
+    {
+      id: 'fast-cash',
+      name: 'Fast Cash Strategy',
+      tag: 'Alternative',
+      rank: 2,
+      inputs: [
+        'Reprice by -5%',
+        'Lower down payment',
+        'Push smaller units early',
+        'Release all available units now',
+      ],
+      revenue6m: 129000000,
+      selloutMonths: 8.6,
+      leftoverUnits: 9,
+      avgRealizedPrice: 7900000,
+      cashflowScore: 85,
+      confidence: 'Medium',
+      why: 'Improves speed and cash collection, but weakens premium scarcity and realized pricing.',
+    },
+    {
+      id: 'premium-protection',
+      name: 'Premium Protection Strategy',
+      tag: 'Alternative',
+      rank: 3,
+      inputs: [
+        'Hold premium units',
+        'No price reduction',
+        'Keep 5Y plan',
+        'Push non-premium stock only',
+      ],
+      revenue6m: 131000000,
+      selloutMonths: 13.6,
+      leftoverUnits: 16,
+      avgRealizedPrice: 8450000,
+      cashflowScore: 64,
+      confidence: 'Low',
+      why: 'Preserves premium posture but leaves too much aging inventory in place.',
+    },
+  ],
+
+  methodology: [
+    {
+      id: 'discrete-choice',
+      title: 'Discrete Choice Modeling',
+      mvpMethod: 'Multinomial Logit',
+      laterMethod: 'Gradient Boosted Ranking Models',
+      purpose: 'Models how a buyer chooses between available units and captures substitution effects.',
+    },
+    {
+      id: 'survival-modeling',
+      title: 'Survival Modeling',
+      mvpMethod: 'Unit Time-to-Sale Estimation',
+      laterMethod: 'Segmented Survival Models',
+      purpose: 'Adds temporal realism by estimating how long units remain active under different strategies.',
+    },
+    {
+      id: 'monte-carlo',
+      title: 'Monte Carlo Simulation',
+      mvpMethod: 'Scenario Sampling',
+      laterMethod: 'Expanded Stochastic Paths',
+      purpose: 'Runs many plausible buyer interaction paths to account for uncertainty in behavior.',
+    },
+    {
+      id: 'optimization',
+      title: 'Optimization Layer',
+      mvpMethod: 'Grid Search',
+      laterMethod: 'Bayesian Optimization',
+      purpose: 'Searches across strategy combinations to identify the strongest action under chosen objectives and constraints.',
+    },
+  ],
+
+  recommendation: {
+    id: 'rec-001',
+    title: 'Reduce price by 2.5% on aging 2BR standard-view units',
+    body: 'Shift aging mid-tier units to the 8-year installment plan, protect premium corners, and maintain phased release on high-value stock.',
+    upliftRevenuePct: 6.3,
+    fasterSelloutMonths: 3.4,
+    leftoverReductionUnits: 7,
+    premiumPositioningPreserved: true,
+    confidence: 'Medium',
+    actions: ['View Decision Packet', 'View World Model', 'Rerun with Constraints'],
+  },
+};
