@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phase One: Bazaar Digital Flow</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-soft: #11141c;
+    --card: #161a25;
+    --card-hover: #1c2130;
+    --border: #242a3a;
+    --accent: #ff6b35;
+    --accent-soft: rgba(255, 107, 53, 0.12);
+    --accent-2: #ffd166;
+    --text: #e8ecf3;
+    --text-dim: #a0a8bd;
+    --text-muted: #6b7388;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 80px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 2px;
+  }
+
+  .hero-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin: 0 0 20px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-dim) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.15;
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 72px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+  }
+
+  /* 2x2 Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    .container { padding: 40px 20px 60px; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--card-hover);
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: var(--text);
+  }
+
+  .card-body {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* Flow diagram */
+  .flow-diagram {
+    margin-top: 32px;
+    padding: 28px;
+    background: linear-gradient(135deg, var(--bg-soft) 0%, var(--card) 100%);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+
+  .flow-diagram-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .flow-step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  /* Final message */
+  .final-message {
+    margin-top: 80px;
+    padding: 48px 40px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 209, 102, 0.05) 100%);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    text-align: center;
+  }
+
+  .final-message-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .final-message-text {
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    color: var(--text);
+    font-weight: 500;
+    margin: 0;
+    max-width: 820px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-eyebrow">Phase One</div>
+    <h1>Bazaar Digital Flow</h1>
+    <p>A complete digital operating layer for Shababco's bazaar: consumer ticketing, vendor booking, booth/package control, event product visibility, POS sales capture, and admin reporting.</p>
+  </header>
+
+  <!-- Section 1 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">Section 01</span>
+      <h2 class="section-title">Strategic Output of Phase One</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="card-tag">Card 1</span>
+        <h3 class="card-title">Better Event Experience</h3>
+        <p class="card-body">Consumers get a cleaner event journey. They can discover the event, understand the experience, view participating brands, and buy tickets directly through Shababco's own ticketing system.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 2</span>
+        <h3 class="card-title">Better Vendor Experience</h3>
+        <p class="card-body">Brands get a more professional booking journey. They can book booths, receive confirmation, connect their store or event profile, and prepare their bazaar catalog more clearly.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 3</span>
+        <h3 class="card-title">Better Internal Control</h3>
+        <p class="card-body">Shababco gets one central dashboard for events, tickets, vendors, booths, booking status, product visibility, and event sales data. This reduces operational friction and gives the team a clearer view of each bazaar.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 4</span>
+        <h3 class="card-title">Better Marketplace Foundation</h3>
+        <p class="card-body">The most important output is not only a better bazaar experience. It is that Shababco starts building a structured vendor, consumer, ticketing, product, and transaction database that can later support the year-round marketplace.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 2 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">Section 02</span>
+      <h2 class="section-title">Consumer Experience</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="card-tag">Card 1</span>
+        <h3 class="card-title">Event Landing Page</h3>
+        <p class="card-body">Consumers land on a clean Shababco event page. They see the event identity, date, venue, visuals, schedule, artists, participating brands, and key experience highlights.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 2</span>
+        <h3 class="card-title">Discovery Before the Event</h3>
+        <p class="card-body">The page helps consumers understand what they are coming for before they buy a ticket. This can include featured brands, event collections, product previews, sponsor sections, and the overall event story.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 3</span>
+        <h3 class="card-title">Native Ticket Purchase</h3>
+        <p class="card-body">Consumers buy tickets directly through Shababco's own ticketing system. The flow should support ticket types, pricing, availability, confirmation, and ticket IDs/QR codes.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 4</span>
+        <h3 class="card-title">Post-Event Continuity</h3>
+        <p class="card-body">After the event, the same page can become a post-event destination. Consumers can revisit brands, see highlights, browse products, and continue into the future marketplace experience.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">Section 03</span>
+      <h2 class="section-title">Vendor Booking Flow</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="card-tag">Card 1</span>
+        <h3 class="card-title">Vendor Entry Point</h3>
+        <p class="card-body">Brands enter through the Shababco website. Instead of informal communication or scattered forms, the website becomes the official vendor booking gateway.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 2</span>
+        <h3 class="card-title">Booth Package Selection</h3>
+        <p class="card-body">Brands choose from available booth packages. Each package can have its own price, size, design, benefits, location tier, or visibility level.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 3</span>
+        <h3 class="card-title">Booking Confirmation</h3>
+        <p class="card-body">Once a brand books, the system creates a unique vendor/event ID. This ID connects the brand to the event and becomes the bridge into product selection, POS usage, and future marketplace onboarding.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 4</span>
+        <h3 class="card-title">Cleaner Vendor Operations</h3>
+        <p class="card-body">Shababco can track who booked, who paid, who is pending, which package they selected, and which brands are participating in each event. This turns vendor booking into structured operational data.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 4 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">Section 04</span>
+      <h2 class="section-title">Admin Dashboard</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="card-tag">Card 1</span>
+        <h3 class="card-title">Event Control</h3>
+        <p class="card-body">The admin team can create and update event pages without depending on developers for every change. They can update images, descriptions, dates, venue information, schedules, sponsor sections, and event catalogs.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 2</span>
+        <h3 class="card-title">Ticketing Control</h3>
+        <p class="card-body">The admin team can create ticket types, adjust pricing, set availability, view buyers, track issued tickets, and monitor event attendance data. This gives Shababco ownership over the ticketing layer instead of depending fully on external routing.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 3</span>
+        <h3 class="card-title">Booth and Vendor Control</h3>
+        <p class="card-body">The admin team can create booth packages, adjust availability, manage pricing, view bookings, confirm payments, approve vendors, and decide which brands appear publicly.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 4</span>
+        <h3 class="card-title">Product and Sales Visibility</h3>
+        <p class="card-body">Once brands connect product data and use the event POS, the admin team can see which SKUs are being brought, what is selling, and how the event is performing commercially.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 5 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-number">Section 05</span>
+      <h2 class="section-title">POS and Event Data Loop</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="card-tag">Card 1</span>
+        <h3 class="card-title">Brand Verification</h3>
+        <p class="card-body">After booking, a Shopify brand installs the app or enters through the event POS flow using its vendor/event ID. The system verifies that the brand is actually participating in the event.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 2</span>
+        <h3 class="card-title">Bazaar SKU Selection</h3>
+        <p class="card-body">The brand selects which products or SKUs it plans to bring to the bazaar. This gives Shababco visibility into the event's product mix before the event starts.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 3</span>
+        <h3 class="card-title">Event POS / Sales Capture</h3>
+        <p class="card-body">During the bazaar, the brand uses a lightweight POS or sales logger for event-specific transactions. The goal is to capture SKU-level sales movement, not overload the brand with a complex retail system.</p>
+      </article>
+      <article class="card">
+        <span class="card-tag">Card 4</span>
+        <h3 class="card-title">Admin Data Loop</h3>
+        <p class="card-body">Sales, SKU movement, vendor performance, category performance, and price-point signals flow back into the admin dashboard, completing the loop.</p>
+      </article>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="flow-diagram-label">The Complete Loop</div>
+      <div class="flow">
+        <span class="flow-step">Vendor Booking</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">SKU Selection</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Bazaar Sales</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Admin Insights</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Marketplace Readiness</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final message -->
+  <div class="final-message">
+    <div class="final-message-label">Final Page Message</div>
+    <p class="final-message-text">Phase One gives Shababco direct control over the bazaar's digital experience while creating the vendor, product, ticketing, and transaction data foundation for the marketplace.</p>
+  </div>
+
+</div>
+</body>
+</html>
